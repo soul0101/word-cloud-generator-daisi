@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud, STOPWORDS
 
 def process_wordcloud(text, **kwargs):
-    r"""
+    """
     Function for generating wordcloud object
     Parameters
     ----------
@@ -123,6 +123,7 @@ def process_wordcloud(text, **kwargs):
     buffer: io.BytesIO
         buffer containing the generated wordcloud image in bytes
     """
+
     if text is None:
         text = "Sample Text"
 
@@ -164,6 +165,7 @@ def get_image_from_buffer(buffer):
     -------
     PIL.Image
     """
+
     buffer.seek(0)
     return Image.open(buffer)
 
@@ -182,6 +184,7 @@ def fit_to_canvas(image, canvas_size):
     -------
     PIL.Image
     """
+
     width = image.size[0]
     height = image.size[1]
     maxwidth = canvas_size[0]
@@ -248,10 +251,6 @@ def st_ui():
 
 
     st.subheader("WordCloud Generator")
-    # my_text = st.text_area("Text to convert to WordCloud", """The daisy is a European species of the family Asteraceae, often considered the archetypal species of the name daisy. To distinguish this species from other plants known as daisies, it is sometimes qualified as common daisy, lawn daisy or English daisy. The species generally blooms from early to midsummer, although when grown under ideal conditions, it has a very long flowering season and will even produce a few flowers in the middle of mild winters. 
-    #                         It can generally be grown where minimum temperatures are above -35 °C (-30 °F), in full sun to partial shade conditions, and requires little or no maintenance. It has no known serious insect or disease problems and can generally be grown in most well-drained soils. The plant may be propagated either by seed after the last frost, or by division after flowering.
-    #                         Though not native to the United States,[13] the species is still considered a valuable ground cover in certain garden settings (e.g., as part of English or cottage inspired gardens, as well as spring meadows where low growth and some color is desired in parallel with minimal care and maintenance while helping to crowd out noxious weeds once established and naturalised).
-    #                         Numerous single and double-flowered varieties are in cultivation, producing flat or spherical blooms in a range of sizes (1 to 6 cm or 3⁄8 to 2+3⁄8 in) and colours (red, pink and white). They are generally grown from seed as biennial bedding plants. They can also be purchased as plugs in Spring. It has been reported to be mostly self-fertilizing, but some plants may be self-sterile.""")
     my_text = st.text_area("Text to convert to WordCloud", open("./resources/example_text.txt", "r").read())
     if st.button("Generate"):
         wordcloud_img = process_wordcloud(my_text, mask=wc_mask_array, width=quality_to_dim[wc_quality]['width'], height=quality_to_dim[wc_quality]['height'], background_color=wc_bg_color, stopwords = STOPWORDS, contour_width=0.5, contour_color=wc_contour_color)
