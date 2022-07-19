@@ -237,7 +237,7 @@ def st_ui():
             "height": 1080
         },
     }
-    wc_try_mask = st.sidebar.checkbox('Try WordCloud Mask')
+    wc_try_mask = st.sidebar.checkbox('Try WordCloud Mask', help='Unselect if you want to upload custom Word Cloud mask')
     wc_mask = st.sidebar.file_uploader('Or upload Custom WordCloud Mask', type=["png","jpg","jpeg"], help="All white (#FF or #FFFFFF) entries will be considerd “masked out” while other entries will be free to draw on.")
 
     if wc_try_mask:
@@ -252,6 +252,10 @@ def st_ui():
 
     st.subheader("WordCloud Generator")
     my_text = st.text_area("Text to convert to WordCloud", open("./resources/example_text.txt", "r").read())
+    if wc_mask_array is not None:
+        st.sidebar.write("Selected WordCloud Mask")
+        st.sidebar.image(wc_mask_array)
+
     if st.button("Generate"):
         wordcloud_img = process_wordcloud(my_text, mask=wc_mask_array, width=quality_to_dim[wc_quality]['width'], height=quality_to_dim[wc_quality]['height'], background_color=wc_bg_color, stopwords = STOPWORDS, contour_width=0.5, contour_color=wc_contour_color)
         st.image(wordcloud_img)
