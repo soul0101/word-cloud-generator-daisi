@@ -10,3 +10,13 @@ This daisi provides rich functions to the user to generate a word cloud based on
 1) User can define the shape of the word cloud. 
 2) Modular background and contour colors.
 3) Flexible quality and resolution of the generated image.
+
+## Test API Call
+``` python
+import pydaisi as pyd
+word_cloud_generator = pyd.Daisi("soul0101/Word Cloud Generator")
+
+text = "generate wordcloud from this sentence"
+result_wordcloud = word_cloud_generator.process_wordcloud(text).value
+result_wordcloud.show()
+```
