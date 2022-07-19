@@ -190,7 +190,7 @@ def fit_to_canvas(image, canvas_size):
     maxwidth = canvas_size[0]
     maxheight = canvas_size[1]
     resize_ratio = min(maxwidth/width, maxheight/height)
-    return image.resize((int(width*resize_ratio), int(height*resize_ratio)), Image.ANTIALIAS)
+    return image.resize((int(width*resize_ratio) - 10, int(height*resize_ratio) - 10), Image.ANTIALIAS)
 
 def prep_mask(image, canvas_size=None):
     """
@@ -253,11 +253,13 @@ def st_ui():
     st.subheader("WordCloud Generator")
     my_text = st.text_area("Text to convert to WordCloud", open("./resources/example_text.txt", "r").read())
     if wc_mask_array is not None:
+        countour_enabled = st.sidebar.checkbox('Enable Contour', value=True, help='Add a border to the custom shaped Word Cloud')
+        wc_contour_width = 1 if countour_enabled else 0
         st.sidebar.write("Selected WordCloud Mask")
         st.sidebar.image(wc_mask_array)
 
     if st.button("Generate"):
-        wordcloud_img = process_wordcloud(my_text, mask=wc_mask_array, width=quality_to_dim[wc_quality]['width'], height=quality_to_dim[wc_quality]['height'], background_color=wc_bg_color, stopwords = STOPWORDS, contour_width=0.5, contour_color=wc_contour_color)
+        wordcloud_img = process_wordcloud(my_text, mask=wc_mask_array, width=quality_to_dim[wc_quality]['width'], height=quality_to_dim[wc_quality]['height'], background_color=wc_bg_color, stopwords = STOPWORDS, contour_width=wc_contour_width, contour_color=wc_contour_color)
         st.image(wordcloud_img)
         st.download_button(
             label="Download Image",
