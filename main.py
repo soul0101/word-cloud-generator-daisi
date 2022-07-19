@@ -120,20 +120,19 @@ def process_wordcloud(text, **kwargs):
 
     Returns
     -------
-    buffer: io.BytesIO
-        buffer containing the generated wordcloud image in bytes
+    PIL.Image.Image
     """
 
     if text is None:
         text = "Sample Text"
 
     wordcloud_obj = WordCloud(**kwargs).generate(text)
-    wordcloud_buff = plot_cloud_buff(wordcloud_obj)
-    return wordcloud_buff
+    wordcloud_img = plot_cloud_img(wordcloud_obj)
+    return wordcloud_img
 
-def plot_cloud_buff(wordcloud_obj):
+def plot_cloud_img(wordcloud_obj):
     """
-    Function to get generated wordcloud in bytes
+    Helper function to plot generated wordcloud
 
     Parameters
     ----------
@@ -142,30 +141,13 @@ def plot_cloud_buff(wordcloud_obj):
 
     Returns
     -------
-    buffer: io.BytesIO
-        buffer containing the generated wordcloud image in bytes
+    PIL.Image.Image
     """
 
     plt.figure(figsize=(wordcloud_obj.width/100,wordcloud_obj.height/100))
     plt.imshow(wordcloud_obj) 
     plt.axis("off")
     plt.savefig(buffer,format='png', bbox_inches='tight', pad_inches=0)
-    return buffer
-
-def get_image_from_buffer(buffer):
-    """
-    Function to convert wordcloud buffer to PIL.Image
-
-    Parameters
-    ----------
-    buffer: io.BytesIO
-        buffer containing the generated wordcloud image in bytes
-
-    Returns
-    -------
-    PIL.Image
-    """
-
     buffer.seek(0)
     return Image.open(buffer)
 
@@ -262,11 +244,14 @@ def st_ui():
     if st.button("Generate"):
         wordcloud_img = process_wordcloud(my_text, mask=wc_mask_array, width=quality_to_dim[wc_quality]['width'], height=quality_to_dim[wc_quality]['height'], background_color=wc_bg_color, stopwords = STOPWORDS, contour_width=wc_contour_width, contour_color=wc_contour_color)
         st.image(wordcloud_img)
-        st.download_button(
-            label="Download Image",
-            data=wordcloud_img,
-            file_name="wordcloud.png",
-            mime="image/jpeg")
+        with BytesIO() as wc_image_buffer:
+            wordcloud_img.save(wc_image_buffer, 'png')
+            st.download_button(
+                label="Download Image",
+                data=wc_image_buffer,
+                file_name="wordcloud.png",
+                mime="image/jpeg")
+        
 
 if __name__ == "__main__":
     st_ui()
