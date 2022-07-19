@@ -252,6 +252,7 @@ def st_ui():
 
     st.subheader("WordCloud Generator")
     my_text = st.text_area("Text to convert to WordCloud", open("./resources/example_text.txt", "r").read())
+    wc_contour_width = 0
     if wc_mask_array is not None:
         countour_enabled = st.sidebar.checkbox('Enable Contour', value=True, help='Add a border to the custom shaped Word Cloud')
         wc_contour_width = 1 if countour_enabled else 0
